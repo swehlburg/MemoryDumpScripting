@@ -49,23 +49,23 @@ M221_addresses_vec = [
 M22_blocks_vec = [
     "RAM",
     "Reserved_area_1",
-    "Peripheral_I/O_registers_1",
-    "On-chip_ROM_(E2_data_flash)",
+    "Peripheral_IO_registers_1",
+    "On-chip_ROM_E2_data_flash",
     "Reserved_area_2",
     "FCU-RAM",
     "Reserved_area_3",
-    "Peripheral_I/O_registers_2",
+    "Peripheral_IO_registers_2",
     "Reserved_area_4",
-    "Peripheral_I/O_registers_3",
+    "Peripheral_IO_registers_3",
     "Reserved_area_5",
-    "On-chip_ROM_(program_ROM)",
+    "On-chip_ROM_program_ROM",
     "External_address_space",
     "Reserved_area_6",
-    "On-chip_ROM_(FCU_firmware)_(read_only)",
+    "On-chip_ROM_FCU_firmware_read_only",
     "Reserved_area_7",
-    "On-chip_ROM_(user_boot)_(read_only)",
+    "On-chip_ROM_user_boot_read_only",
     "Reserved_area_8",
-    "On-chip_ROM_(program_ROM)_(read_only)"
+    "On-chip_ROM_program_ROM_read_only"
 ]
 
 
@@ -115,7 +115,7 @@ def formatted_dump(name: str,
         meta_text.append(str("Memory Dump Number: " + str(i+1)))
         meta_text.append(str("Start Time: " + time.strftime("Y%Y_M%m_D%d__H%H_Min%M_S%S", time.gmtime())))
         j = 0
-        os.mkdir(str(filepath) + "/" + str(i))
+        os.mkdir(str(filepath) + "DumpNum" + str(i))
         while j < (len(M221_addresses_vec) - 1):
             if j != 13:
                 print("Block Number: " + str(j))
@@ -124,7 +124,7 @@ def formatted_dump(name: str,
                                 str(plc_ip),
                                 str(M221_addresses_vec[j]),
                                 str(M221_addresses_vec[j+1] - M221_addresses_vec[j]),
-                                str(filepath + str(i) + "/" + str(j) + "_" + M22_blocks_vec[j] + ".bin")])
+                                str(filepath + "DumpNum" + str(i) + "/BlockNum" + str(j) + "_" + M22_blocks_vec[j] + ".bin")])
             j += 1
         meta_text.append(str("End Time: " + time.strftime("Y%Y_M%m_D%d__H%H_Min%M_S%S", time.gmtime())))
         time.sleep(5)
