@@ -20,7 +20,7 @@ Program_dict = {
 
 Attack_dict = {
     0: "N/A",
-    1: "PasswordBreak"
+    1: "PasswordBreakNops"
 }
 
 M221_addresses_vec = [
@@ -78,7 +78,6 @@ def formatted_dump(name: str,
         program_id: 0 -> Elevator, 1 -> Conveyor
         plc_ip: ip address of target PLC
         num_dumps: number of memory dumps to run on this PLC
-        time_delay: the amount of seconds to wait between each memory dump
     """
 
     plc = PLC_dict.get(plc_id)
@@ -139,7 +138,7 @@ def formatted_attack_dump(name: str,
                           attack_id: int, attack_parameters: str):
     """
         main function to gather multiple memory dumps
-        name: name of person running program
+        name: name of person taking memory dump
         plc_id: 0 -> M221, 1 -> AllenBradley
         program_id: 0 -> Elevator, 1 -> Conveyor
         plc_ip: ip address of target PLC
@@ -180,21 +179,23 @@ def formatted_attack_dump(name: str,
         print("Dump Number: " + str(i))
         meta_text.append("")
         meta_text.append(str("Memory Dump Number: " + str(i+1)))
-        meta_text.append(str("Start Time: " + time.strftime("%Y_%m_%d__%H_%M_%S", time.gmtime())))
+        meta_text.append(str("Start Time: " + time.strftime("Y%Y_M%m_D%d__H%H_Min%M_S%S", time.gmtime())))
         j = 0
-        os.mkdir(str(filepath) + "/" + str(i))
+        os.mkdir(str(filepath) + "DumpNum" + str(i))
         while j < (len(M221_addresses_vec) - 1):
             if j != 13:
                 print("Block Number: " + str(j))
-                subprocess.run(["python", "m221_read_mem.py",
+                subprocess.run(["python",
+                                "m221_read_mem.py",
                                 str(plc_ip),
                                 str(M221_addresses_vec[j]),
                                 str(M221_addresses_vec[j + 1] - M221_addresses_vec[j]),
-                                str(filepath + str(i) + "/" + str(j) + "_" + M22_blocks_vec[j] + ".bin")])
+                                str(filepath + "DumpNum" + str(i) + "/BlockNum" + str(j) + "_" + M22_blocks_vec[j] + ".bin")])
             j += 1
         meta_text.append(str("End Time: " + time.strftime("Y%Y_M%m_D%d__H%H_Min%M_S%S", time.gmtime())))
         time.sleep(5)
         i += 1
+        print()
 
     write_file_vector(str(filepath) + "/meta_data.txt", meta_text)
 
